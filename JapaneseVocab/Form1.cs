@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 
@@ -17,6 +13,7 @@ namespace JTool
         private List<VocabModel> Vocabs = new List<VocabModel>();
         private VocabModel JapaneseRandomVocab;
         private VocabModel EnglishRandomVocab;
+        private VocabModel RomanjiRandomVocab;
 
         private KeyValuePair<string, string> HiraganaChar;
         private KeyValuePair<string, string> KatakanaChar;
@@ -46,6 +43,7 @@ namespace JTool
 
             GetRandomJapaneseWord();
             GetRandomEnglishWord();
+            GetRandomRomanjiWord();
             GetRandomHiraganaChar();
             GetRandomKatakanaChar();
             GetRandomNumber();
@@ -58,11 +56,13 @@ namespace JTool
             VocabModel Vocab = new VocabModel();
             Vocab.EnglishWord = textBox_English.Text;
             Vocab.JapaneseWord = textBox_Japanese.Text;
+            Vocab.RomanjiWord = textBox_Romanji.Text;
 
-            if (Vocab.EnglishWord != "" && Vocab.JapaneseWord != "")
+            //Need either japanese or romanji filled in
+            if (Vocab.EnglishWord != "" && (Vocab.JapaneseWord != "" || Vocab.RomanjiWord != ""))
             {
                 //Check to see English/Japanese word combo already exists
-                bool IsDuplicate = Vocabs.Any(v => v.EnglishWord.Trim().ToLower() == Vocab.EnglishWord.Trim().ToLower() && v.JapaneseWord.Trim().ToLower() == Vocab.JapaneseWord.Trim().ToLower());
+                bool IsDuplicate = Vocabs.Any(v => v.EnglishWord.Trim().ToLower() == Vocab.EnglishWord.Trim().ToLower() && v.JapaneseWord.Trim().ToLower() == Vocab.JapaneseWord.Trim().ToLower() && v.RomanjiWord.Trim().ToLower() == Vocab.RomanjiWord.Trim().ToLower());
 
                 if (!IsDuplicate)
                 {
@@ -81,6 +81,11 @@ namespace JTool
 
                     textBox_English.Clear();
                     textBox_Japanese.Clear();
+                    textBox_Romanji.Clear();
+
+                    GetRandomJapaneseWord();
+                    GetRandomEnglishWord();
+                    GetRandomRomanjiWord();
                 }
                 else
                 {
@@ -115,42 +120,42 @@ namespace JTool
 
             GetRandomJapaneseWord();
             GetRandomEnglishWord();
+            GetRandomRomanjiWord();
             GetRandomHiraganaChar();
             GetRandomKatakanaChar();
         }
 
-        private void GetRandomJapaneseWord()
+        private void GetRandomWord(Action<VocabModel, Label> updateLabel, Label label, Func<VocabModel, string> getWord, ref VocabModel randomVocab)
         {
             if (Vocabs.Count > 0)
             {
-                JapaneseRandomVocab = Vocabs[Random.Next(Vocabs.Count)];
+                randomVocab = Vocabs[Random.Next(Vocabs.Count)];
+                string newWord = getWord(randomVocab);
 
-                if (label_JapaneseWord.Text != JapaneseRandomVocab.JapaneseWord)
+                if (label.Text != newWord)
                 {
-                    label_JapaneseWord.Text = JapaneseRandomVocab.JapaneseWord;
+                    updateLabel(randomVocab, label);
                 }
-                else //We don't want repeat random words so we run it again.
+                else // We don't want repeat random words, so we run it again.
                 {
-                    GetRandomJapaneseWord();
+                    GetRandomWord(updateLabel, label, getWord, ref randomVocab);
                 }
             }
         }
 
+        private void GetRandomJapaneseWord()
+        {
+            GetRandomWord((vocab, label) => label.Text = vocab.JapaneseWord, label_JapaneseWord, vocab => vocab.JapaneseWord, ref JapaneseRandomVocab);
+        }
+
         private void GetRandomEnglishWord()
         {
-            if (Vocabs.Count > 0)
-            {
-                EnglishRandomVocab = Vocabs[Random.Next(Vocabs.Count)];
+            GetRandomWord((vocab, label) => label.Text = vocab.EnglishWord, label_EnglishWord, vocab => vocab.EnglishWord, ref EnglishRandomVocab);
+        }
 
-                if (label_EnglishWord.Text != EnglishRandomVocab.EnglishWord)
-                {
-                    label_EnglishWord.Text = EnglishRandomVocab.EnglishWord;
-                }
-                else //We don't want repeat random words so we run it again.
-                {
-                    GetRandomEnglishWord();
-                }
-            }
+        private void GetRandomRomanjiWord()
+        {
+            GetRandomWord((vocab, label) => label.Text = vocab.RomanjiWord, label_RomanjiWord, vocab => vocab.RomanjiWord, ref RomanjiRandomVocab);
         }
 
         private void GetRandomHiraganaChar()
@@ -309,7 +314,7 @@ namespace JTool
             }
             else
             {
-                vocabModelBindingSource.DataSource = Vocabs;
+                ApplyFilter();
             }
         }
 
@@ -571,6 +576,74 @@ namespace JTool
             label67.Visible = !checkBox_HideCounters.Checked;
             label68.Visible = !checkBox_HideCounters.Checked;
             label69.Visible = !checkBox_HideCounters.Checked;
+        }
+
+        private void textBox_WordFilter_TextChanged(object sender, EventArgs e)
+        {
+            ApplyFilter();
+        }
+
+        private void ApplyFilter()
+        {
+            if (textBox_WordFilter.Text != "")
+            {
+                vocabModelBindingSource.DataSource = Vocabs.Where(x => x.EnglishWord.ToLower().Contains(textBox_WordFilter.Text) || x.JapaneseWord.ToLower().Contains(textBox_WordFilter.Text) || x.RomanjiWord.ToLower().Contains(textBox_WordFilter.Text));
+            }
+            else
+            {
+                vocabModelBindingSource.DataSource = Vocabs;
+            }
+        }
+
+        private void button_SubmitRomanji_Click(object sender, EventArgs e)
+        {
+            if (textBox_RomanjiAnswer.Text.ToLower().Trim() == RomanjiRandomVocab.EnglishWord.ToLower().Trim())
+            {
+                MessageBox.Show("Correct!");
+
+                GetRandomRomanjiWord();
+
+                textBox_RomanjiAnswer.Clear();
+            }
+            else
+            {
+                MessageBox.Show("Wrong answer. Try again");
+            }
+        }
+
+        private void textBox_RomanjiAnswer_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                button_SubmitRomanji.PerformClick();
+                e.Handled = true;
+            }
+        }
+
+        private void dataGridView1_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            dataGridView1.BeginEdit(false);
+        }
+
+        private void dataGridView1_CellEndEdit(object sender, DataGridViewCellEventArgs e)
+        {
+            Vocabs = (List<VocabModel>)vocabModelBindingSource.DataSource;
+
+            XmlSerializer XS = new XmlSerializer(typeof(List<VocabModel>));
+
+            using (FileStream fs = new FileStream("Data.xml", FileMode.Create))
+            {
+                XS.Serialize(fs, Vocabs);
+            }
+        }
+
+        private void textBox_Romanji_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                button_Save.PerformClick();
+                e.Handled = true;
+            }
         }
     }
 }
