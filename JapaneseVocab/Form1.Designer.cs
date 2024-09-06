@@ -32,8 +32,8 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.textBox_English = new System.Windows.Forms.TextBox();
@@ -143,10 +143,10 @@
             this.button_SubmitNumber = new System.Windows.Forms.Button();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.vocabModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
-            this.englishWordDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.RomanjiWord = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.englishWordDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.japaneseWordDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.vocabModelBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -419,7 +419,7 @@
             this.dataGridView1.RowHeadersVisible = false;
             dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dataGridView1.RowsDefaultCellStyle = dataGridViewCellStyle6;
-            this.dataGridView1.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dataGridView1.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Meiryo", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridView1.Size = new System.Drawing.Size(795, 392);
             this.dataGridView1.TabIndex = 5;
@@ -1439,9 +1439,14 @@
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
             // 
-            // vocabModelBindingSource
+            // RomanjiWord
             // 
-            this.vocabModelBindingSource.DataSource = typeof(JTool.VocabModel);
+            this.RomanjiWord.DataPropertyName = "RomanjiWord";
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RomanjiWord.DefaultCellStyle = dataGridViewCellStyle3;
+            this.RomanjiWord.HeaderText = "Romanji Word";
+            this.RomanjiWord.Name = "RomanjiWord";
+            this.RomanjiWord.Width = 260;
             // 
             // englishWordDataGridViewTextBoxColumn
             // 
@@ -1452,23 +1457,18 @@
             this.englishWordDataGridViewTextBoxColumn.Name = "englishWordDataGridViewTextBoxColumn";
             this.englishWordDataGridViewTextBoxColumn.Width = 260;
             // 
-            // RomanjiWord
-            // 
-            this.RomanjiWord.DataPropertyName = "RomanjiWord";
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RomanjiWord.DefaultCellStyle = dataGridViewCellStyle3;
-            this.RomanjiWord.HeaderText = "Romanji Word";
-            this.RomanjiWord.Name = "RomanjiWord";
-            this.RomanjiWord.Width = 260;
-            // 
             // japaneseWordDataGridViewTextBoxColumn
             // 
             this.japaneseWordDataGridViewTextBoxColumn.DataPropertyName = "JapaneseWord";
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Meiryo", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Meiryo", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
             this.japaneseWordDataGridViewTextBoxColumn.DefaultCellStyle = dataGridViewCellStyle4;
             this.japaneseWordDataGridViewTextBoxColumn.HeaderText = "Japanese Word";
             this.japaneseWordDataGridViewTextBoxColumn.Name = "japaneseWordDataGridViewTextBoxColumn";
             this.japaneseWordDataGridViewTextBoxColumn.Width = 260;
+            // 
+            // vocabModelBindingSource
+            // 
+            this.vocabModelBindingSource.DataSource = typeof(JTool.VocabModel);
             // 
             // Form1
             // 
