@@ -587,7 +587,7 @@ namespace JTool
         {
             if (textBox_WordFilter.Text != "")
             {
-                vocabModelBindingSource.DataSource = Vocabs.Where(x => x.EnglishWord.ToLower().Contains(textBox_WordFilter.Text) || x.JapaneseWord.ToLower().Contains(textBox_WordFilter.Text) || x.RomanjiWord.ToLower().Contains(textBox_WordFilter.Text));
+                vocabModelBindingSource.DataSource = Vocabs.Where(x => x.EnglishWord.ToLower().Contains(textBox_WordFilter.Text) || (x.JapaneseWord != null ? x.JapaneseWord.ToLower().Contains(textBox_WordFilter.Text) : x.JapaneseWord == "") || x.RomanjiWord.ToLower().Contains(textBox_WordFilter.Text));
             }
             else
             {
@@ -643,6 +643,22 @@ namespace JTool
             {
                 button_Save.PerformClick();
                 e.Handled = true;
+            }
+        }
+
+        private void dataGridView1_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.ColumnIndex == 0)
+            {
+                vocabModelBindingSource.DataSource = Vocabs.OrderBy(x => x.EnglishWord).ToList();
+            }
+            else if (e.ColumnIndex == 1)
+            {
+                vocabModelBindingSource.DataSource = Vocabs.OrderBy(x => x.RomanjiWord).ToList();
+            }
+            else if (e.ColumnIndex == 2)
+            {
+                vocabModelBindingSource.DataSource = Vocabs.OrderBy(x => x.JapaneseWord).ToList();
             }
         }
     }
