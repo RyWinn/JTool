@@ -1,0 +1,49 @@
+﻿@page "/JapaneseWordBank"
+
+<h1>Word Bank</h1>
+
+@if (Vocabs.Count == 0)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <InputText @bind-Value="CategoryName" />
+
+    <button @onclick="AddCategory" />
+
+    <InputText @bind-Value="EnglishWord" />
+    <InputText @bind-Value="RomanjiWord" />
+    <InputText @bind-Value="JapaneseWord" />
+
+    <InputSelect @bind-Value="CategoryID">
+        @foreach (var category in Categories)
+        {
+            <option value="@category.CategoryID">@category.CategoryName</option>
+        }
+    </InputSelect>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>English Word</th>
+                <th>Romanji Word</th>
+                <th>Japanese Word</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var forecast in Vocabs)
+            {
+                <tr>
+                    <td>@forecast.EnglishWord</td>
+                    <td>@forecast.RomanjiWord</td>
+                    <td>@forecast.JapaneseWord</td>
+                    <td>@forecast.CategoryName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+
