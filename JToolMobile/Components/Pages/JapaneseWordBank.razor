@@ -2,46 +2,68 @@
 
 <h1>Word Bank</h1>
 
-@if (Vocabs.Count == 0)
+@if (Loading)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <InputText @bind-Value="CategoryName" />
+    <div class="row align-items-center mb-2">
+        <div class="col-4">
+            <InputText @bind-Value="CategoryName" placeholder="Category" style="width:100%" />
+        </div>
+        <div class="col-4">
+            <button @onclick="AddCategory" style="width:100%">Add Category</button>
+        </div>
+    </div>
 
-    <button @onclick="AddCategory" />
+    <div class="row align-items-center mb-2">
+        <div class="col-4">
+            <InputText @bind-Value="EnglishWord" placeholder="English Word" style="width:100%" />
+        </div>
+        <div class="col-4">
+            <InputText @bind-Value="RomanjiWord" placeholder="Romanji Word" style="width:100%" />
+        </div>
+        <div class="col-4">
+            <InputText @bind-Value="JapaneseWord" placeholder="Japanese Word" style="width:100%" />
+        </div>
+    </div>
 
-    <InputText @bind-Value="EnglishWord" />
-    <InputText @bind-Value="RomanjiWord" />
-    <InputText @bind-Value="JapaneseWord" />
-
-    <InputSelect @bind-Value="CategoryID">
-        @foreach (var category in Categories)
-        {
-            <option value="@category.CategoryID">@category.CategoryName</option>
-        }
-    </InputSelect>
+    <div class="row align-items-center">
+        <div class="col-4">
+            <InputSelect @bind-Value="CategoryID" style="width:100%; height:30px">
+                <option value="0" hidden selected>-- category --</option>
+                @foreach (var category in Categories)
+                {
+                    <option value="@category.CategoryID">@category.CategoryName</option>
+                }
+            </InputSelect>
+        </div>
+        <div class="col-4">
+            <button @onclick="AddVocab" style="width:100%">Add Word</button>
+        </div>
+    </div>
 
     <table class="table">
         <thead>
             <tr>
-                <th>English Word</th>
-                <th>Romanji Word</th>
-                <th>Japanese Word</th>
+                <th>English</th>
+                <th>Romanji</th>
+                <th>Japanese</th>
                 <th>Category</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in Vocabs)
-            {
-                <tr>
-                    <td>@forecast.EnglishWord</td>
-                    <td>@forecast.RomanjiWord</td>
-                    <td>@forecast.JapaneseWord</td>
-                    <td>@forecast.CategoryName</td>
-                </tr>
-            }
+            <Virtualize Items="Vocabs" ItemSize="25" SpacerElement="tr">
+                <ChildContent Context="vocab">
+                    <tr>
+                        <td>@vocab.EnglishWord</td>
+                        <td>@vocab.RomanjiWord</td>
+                        <td>@vocab.JapaneseWord</td>
+                        <td>@vocab.CategoryName</td>
+                    </tr>
+                </ChildContent>
+            </Virtualize>
         </tbody>
     </table>
 }

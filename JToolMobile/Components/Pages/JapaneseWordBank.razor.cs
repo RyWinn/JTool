@@ -1,3 +1,5 @@
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using JToolMobile.Models;
 using System.Text;
 
@@ -5,6 +7,8 @@ namespace JToolMobile.Components.Pages
 {
     public partial class JapaneseWordBank
     {
+        private bool Loading = true;
+
         private string EnglishWord = "";
         private string RomanjiWord = "";
         private string JapaneseWord = "";
@@ -52,6 +56,8 @@ namespace JToolMobile.Components.Pages
                     });
                 }
             }
+
+            Loading = false;
         }
 
         private async Task AddCategory()
@@ -76,6 +82,73 @@ namespace JToolMobile.Components.Pages
             foreach (var category in categories)
             {
                 csvBuilder.AppendLine($"{category.CategoryID},{category.CategoryName}");
+            }
+
+            return csvBuilder.ToString();
+        }
+
+        private async Task<bool> ValidateVocab()
+        {
+            bool ReturnValue = true;
+
+            var ToastMessage = "";
+
+            if (Vocabs.Any(v => v.EnglishWord.Trim().ToLower() == EnglishWord.Trim().ToLower() && v.JapaneseWord.Trim().ToLower() == JapaneseWord.Trim().ToLower() && v.RomanjiWord.Trim().ToLower() == RomanjiWord.Trim().ToLower()))
+            {
+                ToastMessage = "This word already exists in the word bank";
+
+                ReturnValue = false;
+            }
+            else if (string.IsNullOrEmpty(EnglishWord))
+            {
+                ToastMessage = "Please enter an English word";
+
+                ReturnValue = false;
+            }
+            else if (string.IsNullOrEmpty(RomanjiWord) || string.IsNullOrEmpty(JapaneseWord))
+            {
+                ToastMessage = "Please enter either a Romanji or Japanese word";
+
+                ReturnValue = false;
+            }
+            else if (CategoryID <= 0)
+            {
+                ToastMessage = "Please select a Category";
+
+                ReturnValue = false;    
+            }
+
+            if (!ReturnValue)
+            {
+                await Toast.Make(ToastMessage, ToastDuration.Short).Show();
+            }
+
+            return ReturnValue;
+        }
+
+        private async Task AddVocab()
+        {
+            if (await ValidateVocab())
+            {
+                Vocabs.Add(new VocabModel { EnglishWord = EnglishWord, JapaneseWord = JapaneseWord, RomanjiWord = RomanjiWord, CategoryID = CategoryID, CategoryName = Categories.FirstOrDefault(x => x.CategoryID == CategoryID).CategoryName });
+
+                await CsvHelper.SaveCsvAsync("VocabData.csv", ConvertVocabsToCsv(Vocabs));
+
+                EnglishWord = ""; //clear textbox after inserting
+                RomanjiWord = "";
+                JapaneseWord = "";
+                CategoryID = 0;
+            }
+        }
+
+        private static string ConvertVocabsToCsv(List<VocabModel> vocabs)
+        {
+            var csvBuilder = new StringBuilder();
+            csvBuilder.AppendLine("EnglishWord,JapaneseWord,RomanjiWord,CategoryID"); // Header
+
+            foreach (var vocab in vocabs)
+            {
+                csvBuilder.AppendLine($"{vocab.EnglishWord},{vocab.JapaneseWord},{vocab.RomanjiWord},{vocab.CategoryID}");
             }
 
             return csvBuilder.ToString();

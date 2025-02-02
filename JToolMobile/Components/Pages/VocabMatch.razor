@@ -1,0 +1,58 @@
+﻿@page "/VocabMatch"
+
+<h1>Word Bank</h1>
+
+@if (Loading)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h3>Categories</h3>
+
+    <ul>
+        @foreach (var category in Categories)
+        {
+            <li>
+                <span>@category.CategoryName</span>
+                <input type="checkbox" checked="@category.Visible" @onchange="() => ToggleVisibility(category)" />
+            </li>
+        }
+    </ul>
+
+    <div class="row align-items-center mb-2">
+        <div class="col-4">
+            <label style="width:100%">@RandomEnglishWord.EnglishWord</label>
+        </div>
+        <div class="col-4">
+            <InputText @bind-Value="EnglishWord" placeholder="Romanji/Japanese" style="width:100%" @oninput="EnglishInputChange" @onkeypress="EnglishKeyPress" />
+        </div>
+        <div class="col-4">
+            <button @onclick="SubmitEnglishWord" style="width:100%">Submit</button>
+        </div>
+    </div>
+
+    <div class="row align-items-center mb-2">
+        <div class="col-4">
+            <label style="width:100%">@RandomRomanjiWord.RomanjiWord</label>
+        </div>
+        <div class="col-4">
+            <InputText @bind-Value="RomanjiWord" placeholder="English" style="width:100%" @oninput="RomanjiInputChange" @onkeypress="RomanjiKeyPress" />
+        </div>
+        <div class="col-4">
+            <button @onclick="SubmitRomanjiWord" style="width:100%">Submit</button>
+        </div>
+    </div>
+
+    <div class="row align-items-center mb-2">
+        <div class="col-4">
+            <label style="width:100%">@RandomJapaneseWord.JapaneseWord</label>
+        </div>
+        <div class="col-4">
+            <InputText @bind-Value="JapaneseWord" placeholder="English" style="width:100%" @oninput="JapaneseInputChange" @onkeypress="JapaneseKeyPress" />
+        </div>
+        <div class="col-4">
+            <button @onclick="SubmitJapaneseWord" style="width:100%">Submit</button>
+        </div>
+    </div>
+}
