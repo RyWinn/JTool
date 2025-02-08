@@ -1,0 +1,44 @@
+﻿@page "/JapaneseWordCategories"
+
+@if (Loading)
+{
+    <Loading />
+}
+else
+{
+    <h1 class="text-center">Word Categories</h1>
+
+    <div class="card p-2 mb-1">
+        <MudButton OnClick="(() => Expanded = !Expanded)" EndIcon="@Icons.Material.Rounded.ArrowDropDown" Size="Size.Small" Color="Color.Primary"
+                   Variant="Variant.Filled">Add New Category</MudButton>
+
+        <MudCollapse Expanded="@Expanded">
+            <div class="row align-items-center">
+                <div class="col-4">
+                    <MudTextField @bind-Value="CategoryName" Label="Category" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" />
+                </div>
+                <div class="col-4">
+                    <MudButton OnClick="AddCategory" Color="Color.Primary" Variant="Variant.Filled" FullWidth="true">Add</MudButton>
+                </div>
+                <div class="col-4">
+                    <MudButton OnClick="RemoveCategory" Color="Color.Primary" Variant="Variant.Filled" FullWidth="true" Disabled="@DeleteDisabled">Remove</MudButton>
+                </div>
+            </div>
+        </MudCollapse>
+    </div>
+
+    <MudDataGrid Items="Categories" Virtualize="true" FixedHeader="true" Height="@GetGridHeight()" Filterable="true" T="CategoryModel" Bordered="true"
+                 FilterMode="DataGridFilterMode.ColumnFilterMenu" MultiSelection="true" SelectOnRowClick="true" SelectedItemsChanged="SelectCategory"
+                 Outlined="true" Breakpoint="Breakpoint.None" Dense="true">
+        <Columns>
+            <SelectColumn T="CategoryModel" />
+            <PropertyColumn Property="x => x.CategoryName" Title="Category" />
+
+            <PropertyColumn Property="x => x.CategoryID" Title="Words Used" T="CategoryModel" TProperty="int" >
+                <CellTemplate Context="category">
+                    @Vocabs.Count(x => x.CategoryID == category.Item.CategoryID)
+                </CellTemplate>
+            </PropertyColumn>
+        </Columns>
+    </MudDataGrid>
+}

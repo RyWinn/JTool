@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using MudBlazor.Services;
 
 namespace JToolMobile
 {
@@ -20,6 +21,7 @@ namespace JToolMobile
                 });
 
             builder.Services.AddMauiBlazorWebView();
+            builder.Services.AddMudServices();
 
 #if DEBUG
     		builder.Services.AddBlazorWebViewDeveloperTools();

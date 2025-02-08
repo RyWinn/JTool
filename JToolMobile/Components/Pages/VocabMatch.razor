@@ -1,58 +1,58 @@
 ﻿@page "/VocabMatch"
 
-<h1>Word Bank</h1>
-
 @if (Loading)
 {
-    <p><em>Loading...</em></p>
+    <Loading />
 }
 else
 {
+    <h1 class="text-center">Vocab Match</h1>
+
     <h3>Categories</h3>
 
-    <ul>
+    <ul style="max-height:200px; overflow-y:scroll;">
         @foreach (var category in Categories)
         {
-            <li>
-                <span>@category.CategoryName</span>
-                <input type="checkbox" checked="@category.Visible" @onchange="() => ToggleVisibility(category)" />
-            </li>
+            <MudSwitch Value="category.Visible" ValueChanged="() => ToggleVisibility(category)" T="bool" Color="Color.Primary"
+                       Label="@category.CategoryName" Size="Size.Large" />
         }
     </ul>
 
-    <div class="row align-items-center mb-2">
-        <div class="col-4">
-            <label style="width:100%">@RandomEnglishWord.EnglishWord</label>
+    <div class="card p-2 mb-1">
+        <div class="row align-items-center mb-2">
+            <div class="col-4">
+                <label style="width:100%">@RandomEnglishWord.EnglishWord</label>
+            </div>
+            <div class="col-4">
+                <MudTextField @bind-Value="EnglishWord" Label="Romanji/Japanese" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" OnKeyDown="EnglishKeyPress" />
+            </div>
+            <div class="col-4">
+                <MudButton OnClick="SubmitEnglishWord" Color="Color.Primary" Variant="Variant.Filled" FullWidth="true">Submit</MudButton>
+            </div>
         </div>
-        <div class="col-4">
-            <InputText @bind-Value="EnglishWord" placeholder="Romanji/Japanese" style="width:100%" @oninput="EnglishInputChange" @onkeypress="EnglishKeyPress" />
-        </div>
-        <div class="col-4">
-            <button @onclick="SubmitEnglishWord" style="width:100%">Submit</button>
-        </div>
-    </div>
 
-    <div class="row align-items-center mb-2">
-        <div class="col-4">
-            <label style="width:100%">@RandomRomanjiWord.RomanjiWord</label>
+        <div class="row align-items-center mb-2">
+            <div class="col-4">
+                <label style="width:100%">@RandomRomanjiWord.RomanjiWord</label>
+            </div>
+            <div class="col-4">
+                <MudTextField @bind-Value="RomanjiWord" Label="English" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" OnKeyDown="RomanjiKeyPress" />
+            </div>
+            <div class="col-4">
+                <MudButton OnClick="SubmitRomanjiWord" Color="Color.Primary" Variant="Variant.Filled" FullWidth="true">Submit</MudButton>
+            </div>
         </div>
-        <div class="col-4">
-            <InputText @bind-Value="RomanjiWord" placeholder="English" style="width:100%" @oninput="RomanjiInputChange" @onkeypress="RomanjiKeyPress" />
-        </div>
-        <div class="col-4">
-            <button @onclick="SubmitRomanjiWord" style="width:100%">Submit</button>
-        </div>
-    </div>
 
-    <div class="row align-items-center mb-2">
-        <div class="col-4">
-            <label style="width:100%">@RandomJapaneseWord.JapaneseWord</label>
-        </div>
-        <div class="col-4">
-            <InputText @bind-Value="JapaneseWord" placeholder="English" style="width:100%" @oninput="JapaneseInputChange" @onkeypress="JapaneseKeyPress" />
-        </div>
-        <div class="col-4">
-            <button @onclick="SubmitJapaneseWord" style="width:100%">Submit</button>
+        <div class="row align-items-center mb-2">
+            <div class="col-4">
+                <label style="width:100%">@RandomJapaneseWord.JapaneseWord</label>
+            </div>
+            <div class="col-4">
+                <MudTextField @bind-Value="JapaneseWord" Label="English" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" OnKeyDown="JapaneseKeyPress" />
+            </div>
+            <div class="col-4">
+                <MudButton OnClick="SubmitJapaneseWord" Color="Color.Primary" Variant="Variant.Filled" FullWidth="true">Submit</MudButton>
+            </div>
         </div>
     </div>
 }

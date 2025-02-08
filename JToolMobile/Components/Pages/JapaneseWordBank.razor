@@ -1,71 +1,57 @@
 ﻿@page "/JapaneseWordBank"
 
-<h1>Word Bank</h1>
-
 @if (Loading)
 {
-    <p><em>Loading...</em></p>
+    <Loading />
 }
 else
 {
-    <div class="row align-items-center mb-2">
-        <div class="col-4">
-            <InputText @bind-Value="CategoryName" placeholder="Category" style="width:100%" />
-        </div>
-        <div class="col-4">
-            <button @onclick="AddCategory" style="width:100%">Add Category</button>
-        </div>
+    <h1 class="text-center">Word Bank</h1>
+
+    <div class="card p-2 mb-1">
+        <MudButton OnClick="(() => Expanded = !Expanded)" EndIcon="@Icons.Material.Rounded.ArrowDropDown" Size="Size.Small" Color="Color.Primary"
+                   Variant="Variant.Filled">Add New Word</MudButton>
+
+        <MudCollapse Expanded="@Expanded">
+            <div class="row align-items-center">
+                <div class="col-4">
+                    <MudTextField @bind-Value="EnglishWord" Label="English Word" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" />
+                </div>
+                <div class="col-4">
+                    <MudTextField @bind-Value="RomanjiWord" Label="Romanji Word" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" />
+                </div>
+                <div class="col-4">
+                    <MudTextField @bind-Value="JapaneseWord" Label="Japanese Word" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" />
+                </div>
+            </div>
+            <div class="row align-items-center">
+                <div class="col-4">
+                    <MudSelect @bind-Value="CategoryID" Label="Category" Variant="Variant.Outlined" Margin="Margin.Dense" >
+                        @foreach (var category in Categories)
+                        {
+                            <MudSelectItem T="int?" Value="@category.CategoryID">@category.CategoryName</MudSelectItem>
+                        }
+                    </MudSelect>
+                </div>
+                <div class="col-4">
+                    <MudButton OnClick="AddVocab" Color="Color.Primary" Variant="Variant.Filled" FullWidth="true">Add</MudButton>
+                </div>
+                <div class="col-4">
+                    <MudButton OnClick="RemoveVocab" Color="Color.Primary" Variant="Variant.Filled" FullWidth="true" Disabled="@DeleteDisabled">Remove</MudButton>
+                </div>
+            </div>
+        </MudCollapse>
     </div>
 
-    <div class="row align-items-center mb-2">
-        <div class="col-4">
-            <InputText @bind-Value="EnglishWord" placeholder="English Word" style="width:100%" />
-        </div>
-        <div class="col-4">
-            <InputText @bind-Value="RomanjiWord" placeholder="Romanji Word" style="width:100%" />
-        </div>
-        <div class="col-4">
-            <InputText @bind-Value="JapaneseWord" placeholder="Japanese Word" style="width:100%" />
-        </div>
-    </div>
-
-    <div class="row align-items-center">
-        <div class="col-4">
-            <InputSelect @bind-Value="CategoryID" style="width:100%; height:30px">
-                <option value="0" hidden selected>-- category --</option>
-                @foreach (var category in Categories)
-                {
-                    <option value="@category.CategoryID">@category.CategoryName</option>
-                }
-            </InputSelect>
-        </div>
-        <div class="col-4">
-            <button @onclick="AddVocab" style="width:100%">Add Word</button>
-        </div>
-    </div>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th>English</th>
-                <th>Romanji</th>
-                <th>Japanese</th>
-                <th>Category</th>
-            </tr>
-        </thead>
-        <tbody>
-            <Virtualize Items="Vocabs" ItemSize="25" SpacerElement="tr">
-                <ChildContent Context="vocab">
-                    <tr>
-                        <td>@vocab.EnglishWord</td>
-                        <td>@vocab.RomanjiWord</td>
-                        <td>@vocab.JapaneseWord</td>
-                        <td>@vocab.CategoryName</td>
-                    </tr>
-                </ChildContent>
-            </Virtualize>
-        </tbody>
-    </table>
+    <MudDataGrid Items="Vocabs" Virtualize="true" FixedHeader="true" Height="@GetGridHeight()" Filterable="true" T="VocabModel" Bordered="true"
+                 FilterMode="DataGridFilterMode.ColumnFilterMenu" MultiSelection="true" SelectOnRowClick="true" SelectedItemsChanged="SelectVocab"
+                 Outlined="true" Breakpoint="Breakpoint.None" Dense="true">
+        <Columns>
+            <SelectColumn T="VocabModel" />
+            <PropertyColumn Property="x => x.EnglishWord" Title="English" />
+            <PropertyColumn Property="x => x.RomanjiWord" Title="Romanji" />
+            <PropertyColumn Property="x => x.JapaneseWord" Title="Japanese" />
+            <PropertyColumn Property="x => x.CategoryName" Title="Category" />
+        </Columns>
+    </MudDataGrid>
 }
-
-

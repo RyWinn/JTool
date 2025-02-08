@@ -12,11 +12,15 @@ namespace JToolMobile.Components.Pages
         private string EnglishWord = "";
         private string RomanjiWord = "";
         private string JapaneseWord = "";
-        private int CategoryID = 0;
-        private string CategoryName = "";
+        private int? CategoryID;
 
         private List<VocabModel> Vocabs = new List<VocabModel>();
         private List<CategoryModel> Categories = new List<CategoryModel>();
+
+        private List<VocabModel> SelectedVocabs = new List<VocabModel>();
+
+        private bool DeleteDisabled = true;
+        private bool Expanded = true;
 
         protected override async Task OnInitializedAsync()
         {
@@ -60,33 +64,6 @@ namespace JToolMobile.Components.Pages
             Loading = false;
         }
 
-        private async Task AddCategory()
-        {
-            if (Categories.Any(x => x.CategoryName == CategoryName) || string.IsNullOrEmpty(CategoryName))
-            {
-                return;
-            }
-
-            Categories.Add(new CategoryModel { CategoryName = CategoryName, CategoryID = Categories.Count + 1 });
-
-            await CsvHelper.SaveCsvAsync("CategoryData.csv", ConvertCategoriesToCsv(Categories));
-
-            CategoryName = ""; //clear textbox after inserting
-        }
-
-        private static string ConvertCategoriesToCsv(List<CategoryModel> categories)
-        {
-            var csvBuilder = new StringBuilder();
-            csvBuilder.AppendLine("CategoryID,CategoryName"); // Header
-
-            foreach (var category in categories)
-            {
-                csvBuilder.AppendLine($"{category.CategoryID},{category.CategoryName}");
-            }
-
-            return csvBuilder.ToString();
-        }
-
         private async Task<bool> ValidateVocab()
         {
             bool ReturnValue = true;
@@ -126,19 +103,44 @@ namespace JToolMobile.Components.Pages
             return ReturnValue;
         }
 
+        private void SelectVocab(HashSet<VocabModel> Selected)
+        {
+            SelectedVocabs = Selected.ToList();
+
+            DeleteDisabled = SelectedVocabs.Count == 0;
+
+            StateHasChanged();
+        }
+
         private async Task AddVocab()
         {
             if (await ValidateVocab())
             {
-                Vocabs.Add(new VocabModel { EnglishWord = EnglishWord, JapaneseWord = JapaneseWord, RomanjiWord = RomanjiWord, CategoryID = CategoryID, CategoryName = Categories.FirstOrDefault(x => x.CategoryID == CategoryID).CategoryName });
+                Vocabs.Add(new VocabModel { EnglishWord = EnglishWord, JapaneseWord = JapaneseWord, RomanjiWord = RomanjiWord, CategoryID = CategoryID.Value, CategoryName = Categories.FirstOrDefault(x => x.CategoryID == CategoryID).CategoryName });
 
                 await CsvHelper.SaveCsvAsync("VocabData.csv", ConvertVocabsToCsv(Vocabs));
 
                 EnglishWord = ""; //clear textbox after inserting
                 RomanjiWord = "";
                 JapaneseWord = "";
-                CategoryID = 0;
+                CategoryID = null;
             }
+        }
+
+        private async Task RemoveVocab()
+        {
+            if (SelectedVocabs.Count == 0)
+            {
+                await Toast.Make("Please select a Vocab to remove", ToastDuration.Short).Show();
+                return;
+            }
+
+            foreach (var vocab in SelectedVocabs)
+            {
+                Vocabs.Remove(vocab);
+            }
+
+            await CsvHelper.SaveCsvAsync("VocabData.csv", ConvertVocabsToCsv(Vocabs));
         }
 
         private static string ConvertVocabsToCsv(List<VocabModel> vocabs)
@@ -152,6 +154,16 @@ namespace JToolMobile.Components.Pages
             }
 
             return csvBuilder.ToString();
+        }
+
+        private string GetGridHeight()
+        {
+            if (!Expanded)
+            {
+                return "calc(100vh - 160px)";
+            }
+
+            return "calc(100vh - 260px)";
         }
     }
 }

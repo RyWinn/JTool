@@ -1,7 +1,6 @@
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using JToolMobile.Models;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
 namespace JToolMobile.Components.Pages
@@ -19,8 +18,6 @@ namespace JToolMobile.Components.Pages
         private string EnglishWord = "";
         private string RomanjiWord = "";
         private string JapaneseWord = "";
-        private int CategoryID = 0;
-        private string CategoryName = "";
 
         private List<VocabModel> Vocabs = new List<VocabModel>();
         private List<CategoryModel> Categories = new List<CategoryModel>();
@@ -146,11 +143,6 @@ namespace JToolMobile.Components.Pages
             }
         }
 
-        private void EnglishInputChange(ChangeEventArgs e) //Massive bodge as @bind-value doesn't update in time
-        {
-            EnglishWord = e.Value?.ToString();
-        }
-
         private async Task EnglishKeyPress(KeyboardEventArgs e)
         {
             if (e.Key == "Enter")
@@ -175,11 +167,6 @@ namespace JToolMobile.Components.Pages
             }
         }
 
-        private void RomanjiInputChange(ChangeEventArgs e)
-        {
-            RomanjiWord = e.Value?.ToString();
-        }
-
         private async Task RomanjiKeyPress(KeyboardEventArgs e)
         {
             if (e.Key == "Enter")
@@ -202,11 +189,6 @@ namespace JToolMobile.Components.Pages
             {
                 await Toast.Make("Wrong answer. Please try again.", ToastDuration.Short).Show();
             }
-        }
-
-        private void JapaneseInputChange(ChangeEventArgs e)
-        {
-            JapaneseWord = e.Value?.ToString();
         }
 
         private async Task JapaneseKeyPress(KeyboardEventArgs e)
