@@ -1,5 +1,7 @@
 ﻿@page "/VocabMatch"
 
+@inject ISnackbar Snackbar
+
 @if (Loading)
 {
     <Loading />
@@ -18,41 +20,43 @@ else
         }
     </ul>
 
-    <div class="card p-2 mb-1">
-        <div class="row align-items-center mb-2">
-            <div class="col-4">
-                <label style="width:100%">@RandomEnglishWord.EnglishWord</label>
+    <MudCard>
+        <MudCardContent>
+            <div class="row align-items-center mb-2">
+                <div class="col-4">
+                    <label style="width:100%">@RandomEnglishWord.EnglishWord</label>
+                </div>
+                <div class="col-4">
+                    <MudTextField @bind-Value="EnglishWord" Label="Romanji/Japanese" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" OnKeyDown="EnglishKeyPress" />
+                </div>
+                <div class="col-4">
+                    <MudButton OnClick="SubmitEnglishWord" Color="Color.Primary" Variant="Variant.Filled" FullWidth="true">Submit</MudButton>
+                </div>
             </div>
-            <div class="col-4">
-                <MudTextField @bind-Value="EnglishWord" Label="Romanji/Japanese" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" OnKeyDown="EnglishKeyPress" />
-            </div>
-            <div class="col-4">
-                <MudButton OnClick="SubmitEnglishWord" Color="Color.Primary" Variant="Variant.Filled" FullWidth="true">Submit</MudButton>
-            </div>
-        </div>
 
-        <div class="row align-items-center mb-2">
-            <div class="col-4">
-                <label style="width:100%">@RandomRomanjiWord.RomanjiWord</label>
+            <div class="row align-items-center mb-2">
+                <div class="col-4">
+                    <label style="width:100%">@RandomRomanjiWord.RomanjiWord</label>
+                </div>
+                <div class="col-4">
+                    <MudTextField @bind-Value="RomanjiWord" Label="English" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" OnKeyDown="RomanjiKeyPress" />
+                </div>
+                <div class="col-4">
+                    <MudButton OnClick="SubmitRomanjiWord" Color="Color.Primary" Variant="Variant.Filled" FullWidth="true">Submit</MudButton>
+                </div>
             </div>
-            <div class="col-4">
-                <MudTextField @bind-Value="RomanjiWord" Label="English" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" OnKeyDown="RomanjiKeyPress" />
-            </div>
-            <div class="col-4">
-                <MudButton OnClick="SubmitRomanjiWord" Color="Color.Primary" Variant="Variant.Filled" FullWidth="true">Submit</MudButton>
-            </div>
-        </div>
 
-        <div class="row align-items-center mb-2">
-            <div class="col-4">
-                <label style="width:100%">@RandomJapaneseWord.JapaneseWord</label>
+            <div class="row align-items-center mb-2">
+                <div class="col-4">
+                    <label style="width:100%">@RandomJapaneseWord.JapaneseWord</label>
+                </div>
+                <div class="col-4">
+                    <MudTextField @bind-Value="JapaneseWord" Label="English" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" OnKeyDown="JapaneseKeyPress" />
+                </div>
+                <div class="col-4">
+                    <MudButton OnClick="SubmitJapaneseWord" Color="Color.Primary" Variant="Variant.Filled" FullWidth="true">Submit</MudButton>
+                </div>
             </div>
-            <div class="col-4">
-                <MudTextField @bind-Value="JapaneseWord" Label="English" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" OnKeyDown="JapaneseKeyPress" />
-            </div>
-            <div class="col-4">
-                <MudButton OnClick="SubmitJapaneseWord" Color="Color.Primary" Variant="Variant.Filled" FullWidth="true">Submit</MudButton>
-            </div>
-        </div>
-    </div>
+        </MudCardContent>
+    </MudCard>
 }

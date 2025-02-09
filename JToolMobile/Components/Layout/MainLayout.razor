@@ -1,7 +1,7 @@
 ﻿@inherits LayoutComponentBase
 
 @* Required *@
-<MudThemeProvider />
+<MudThemeProvider @ref="MudThemeProvider" @bind-IsDarkMode="IsDarkMode" DefaultScrollbar="false" />
 <MudPopoverProvider />
 
 @* Needed for dialogs *@
@@ -21,3 +21,26 @@
         </article>
     </main>
 </div>
+
+@code {
+    private bool IsDarkMode;
+    private MudThemeProvider MudThemeProvider;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            IsDarkMode = await MudThemeProvider.GetSystemPreference();
+
+            await MudThemeProvider.WatchSystemPreference(OnSystemPreferenceChanged);
+            StateHasChanged();
+        }
+    }
+
+    private Task OnSystemPreferenceChanged(bool newValue)
+    {
+        IsDarkMode = newValue;
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+}

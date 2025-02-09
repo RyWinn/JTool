@@ -1,5 +1,7 @@
 ﻿@page "/JapaneseWordBank"
 
+@inject ISnackbar Snackbar
+
 @if (Loading)
 {
     <Loading />
@@ -8,40 +10,44 @@ else
 {
     <h1 class="text-center">Word Bank</h1>
 
-    <div class="card p-2 mb-1">
-        <MudButton OnClick="(() => Expanded = !Expanded)" EndIcon="@Icons.Material.Rounded.ArrowDropDown" Size="Size.Small" Color="Color.Primary"
-                   Variant="Variant.Filled">Add New Word</MudButton>
+    <MudCard Class="mb-1">
+        <MudCardContent>
+            <MudButton OnClick="(() => Expanded = !Expanded)" EndIcon="@Icons.Material.Rounded.ArrowDropDown" Size="Size.Small" Color="Color.Primary"
+                       Variant="Variant.Filled" FullWidth="true">Add New Word</MudButton>
 
-        <MudCollapse Expanded="@Expanded">
-            <div class="row align-items-center">
-                <div class="col-4">
-                    <MudTextField @bind-Value="EnglishWord" Label="English Word" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" />
+            <MudCollapse Expanded="@Expanded">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <MudTextField @bind-Value="EnglishWord" Label="English Word" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" />
+                    </div>
+                    <div class="col">
+                        <MudTextField @bind-Value="RomanjiWord" Label="Romanji Word" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" />
+                    </div>
                 </div>
-                <div class="col-4">
-                    <MudTextField @bind-Value="RomanjiWord" Label="Romanji Word" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" />
+                <div class="row align-items-center">
+                    <div class="col">
+                        <MudTextField @bind-Value="JapaneseWord" Label="Japanese Word" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" />
+                    </div>
+                    <div class="col">
+                        <MudSelect @bind-Value="CategoryID" Label="Category" Variant="Variant.Outlined" Margin="Margin.Dense">
+                            @foreach (var category in Categories)
+                            {
+                                <MudSelectItem T="int?" Value="@category.CategoryID">@category.CategoryName</MudSelectItem>
+                            }
+                        </MudSelect>
+                    </div>
                 </div>
-                <div class="col-4">
-                    <MudTextField @bind-Value="JapaneseWord" Label="Japanese Word" Variant="Variant.Outlined" Immediate="true" Margin="Margin.Dense" />
+                <div class="row align-items-center">
+                    <div class="col">
+                        <MudButton OnClick="AddVocab" Color="Color.Primary" Variant="Variant.Filled" FullWidth="true">Add</MudButton>
+                    </div>
+                    <div class="col">
+                        <MudButton OnClick="RemoveVocab" Color="Color.Primary" Variant="Variant.Filled" FullWidth="true" Disabled="@DeleteDisabled">Remove</MudButton>
+                    </div>
                 </div>
-            </div>
-            <div class="row align-items-center">
-                <div class="col-4">
-                    <MudSelect @bind-Value="CategoryID" Label="Category" Variant="Variant.Outlined" Margin="Margin.Dense" >
-                        @foreach (var category in Categories)
-                        {
-                            <MudSelectItem T="int?" Value="@category.CategoryID">@category.CategoryName</MudSelectItem>
-                        }
-                    </MudSelect>
-                </div>
-                <div class="col-4">
-                    <MudButton OnClick="AddVocab" Color="Color.Primary" Variant="Variant.Filled" FullWidth="true">Add</MudButton>
-                </div>
-                <div class="col-4">
-                    <MudButton OnClick="RemoveVocab" Color="Color.Primary" Variant="Variant.Filled" FullWidth="true" Disabled="@DeleteDisabled">Remove</MudButton>
-                </div>
-            </div>
-        </MudCollapse>
-    </div>
+            </MudCollapse>
+        </MudCardContent>
+    </MudCard>
 
     <MudDataGrid Items="Vocabs" Virtualize="true" FixedHeader="true" Height="@GetGridHeight()" Filterable="true" T="VocabModel" Bordered="true"
                  FilterMode="DataGridFilterMode.ColumnFilterMenu" MultiSelection="true" SelectOnRowClick="true" SelectedItemsChanged="SelectVocab"

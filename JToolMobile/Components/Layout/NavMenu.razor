@@ -1,4 +1,4 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿@* <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">JToolMobile</a>
     </div>
@@ -11,6 +11,11 @@
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
                 <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="KanaChart" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Kana Chart
             </NavLink>
         </div>
         <div class="nav-item px-3">
@@ -29,4 +34,22 @@
             </NavLink>
         </div>
     </nav>
-</div>
+</div> *@
+
+<MudNavMenu Class="mud-width-full">
+    <div class="sidebar-header-row">
+        <MudText Typo="Typo.h5" Class="px-6 py-2 w-auto">J Tool</MudText>
+        <MudText Typo="Typo.body1" Class="px-6 mud-text-secondary w-auto">To help learn Japanese</MudText>
+    </div>
+
+    <input type="checkbox" title="Navigation menu" class="navbar-toggler mb-1" style="top: 3px" />
+
+    <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
+        <MudDivider />
+        <MudNavLink Href="" Icon="@Icons.Material.Filled.Home">Home</MudNavLink>
+        <MudNavLink Href="KanaChart" Icon="material-symbols-outlined/language_japanese_kana">Kana Chart</MudNavLink>
+        <MudNavLink Href="VocabMatch" Icon="material-symbols-outlined/dictionary">Vocab Match</MudNavLink>
+        <MudNavLink Href="JapaneseWordCategories" Icon="material-symbols-outlined/category">Word Categories</MudNavLink>
+        <MudNavLink Href="JapaneseWordBank" Icon="material-symbols-outlined/translate">Word Bank</MudNavLink>
+    </div>
+</MudNavMenu>

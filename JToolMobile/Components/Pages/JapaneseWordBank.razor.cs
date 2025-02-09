@@ -1,5 +1,3 @@
-using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
 using JToolMobile.Models;
 using System.Text;
 
@@ -20,7 +18,7 @@ namespace JToolMobile.Components.Pages
         private List<VocabModel> SelectedVocabs = new List<VocabModel>();
 
         private bool DeleteDisabled = true;
-        private bool Expanded = true;
+        private bool Expanded = false;
 
         protected override async Task OnInitializedAsync()
         {
@@ -97,7 +95,7 @@ namespace JToolMobile.Components.Pages
 
             if (!ReturnValue)
             {
-                await Toast.Make(ToastMessage, ToastDuration.Short).Show();
+                Snackbar.Add(ToastMessage, MudBlazor.Severity.Warning);
             }
 
             return ReturnValue;
@@ -131,7 +129,8 @@ namespace JToolMobile.Components.Pages
         {
             if (SelectedVocabs.Count == 0)
             {
-                await Toast.Make("Please select a Vocab to remove", ToastDuration.Short).Show();
+                Snackbar.Add("Please select a Vocab to remove", MudBlazor.Severity.Warning);
+
                 return;
             }
 
@@ -160,10 +159,10 @@ namespace JToolMobile.Components.Pages
         {
             if (!Expanded)
             {
-                return "calc(100vh - 160px)";
+                return "calc(100vh - 170px)";
             }
 
-            return "calc(100vh - 260px)";
+            return "calc(100vh - 300px)";
         }
     }
 }

@@ -1,0 +1,76 @@
+﻿@page "/KanaChart"
+
+@inject ISnackbar Snackbar
+
+@if (Loading)
+{
+    <Loading />
+}
+else
+{
+    <h1 class="text-center">Kana Chart</h1>
+
+    <MudSwitch @bind-Value="ShowKana" Label="Show Kana Chart" Size="Size.Large" Color="Color.Primary" />
+
+    <MudSwitch Value="KatakanaMode" Label="Katakana Mode" Size="Size.Large" Color="Color.Primary" T="bool" ValueChanged="ToggleKanaMode" />
+
+    @if (ShowKana)
+    {
+        @if (KatakanaMode)
+        {
+            <MudDataGrid Items="Katakana" Height="100%" T="KanaModel" Bordered="true" Outlined="true" Breakpoint="Breakpoint.None" Dense="true" >
+                <Columns>
+                    <PropertyColumn Property="x => x.AColumn" Title="A" HeaderStyle="display:none" CellStyle="text-align:center; padding-left:0px; padding-right:0px;" />
+                    <PropertyColumn Property="x => x.IColumn" Title="I" HeaderStyle="display:none" CellStyle="text-align:center; padding-left:0px; padding-right:0px;" />
+                    <PropertyColumn Property="x => x.UColumn" Title="U" HeaderStyle="display:none" CellStyle="text-align:center; padding-left:0px; padding-right:0px;" />
+                    <PropertyColumn Property="x => x.EColumn" Title="E" HeaderStyle="display:none" CellStyle="text-align:center; padding-left:0px; padding-right:0px;" />
+                    <PropertyColumn Property="x => x.OColumn" Title="O" HeaderStyle="display:none" CellStyle="text-align:center; padding-left:0px; padding-right:0px;" />
+                </Columns>
+            </MudDataGrid>
+        }
+        else
+        {
+            <MudDataGrid Items="Hiragana" Height="100%" T="KanaModel" Bordered="true" Outlined="true" Breakpoint="Breakpoint.None" Dense="true">
+                <Columns>
+                    <PropertyColumn Property="x => x.AColumn" Title="A" HeaderStyle="display:none" CellStyle="text-align:center; padding-left:0px; padding-right:0px;" />
+                    <PropertyColumn Property="x => x.IColumn" Title="I" HeaderStyle="display:none" CellStyle="text-align:center; padding-left:0px; padding-right:0px;" />
+                    <PropertyColumn Property="x => x.UColumn" Title="U" HeaderStyle="display:none" CellStyle="text-align:center; padding-left:0px; padding-right:0px;" />
+                    <PropertyColumn Property="x => x.EColumn" Title="E" HeaderStyle="display:none" CellStyle="text-align:center; padding-left:0px; padding-right:0px;" />
+                    <PropertyColumn Property="x => x.OColumn" Title="O" HeaderStyle="display:none" CellStyle="text-align:center; padding-left:0px; padding-right:0px;" />
+                </Columns>
+            </MudDataGrid>
+        }
+    }
+
+    <MudCard Class="my-1">
+        <MudCardContent Style="padding-top:0; padding-bottom:0;">
+            <div class="row align-items-center">
+                <div class="col-3">
+                    <h1 class="text-center">@CurrentKana.Item2</h1>
+                </div>
+                <div class="col-6">
+                    <MudTextField @bind-Value="EnteredKana" Label="Enter English" Variant="Variant.Outlined" />
+                </div>
+                <div class="col-3">
+                    <MudButton OnClick="CheckKanaGuess" Color="Color.Primary">Enter</MudButton>
+                </div>
+            </div>
+        </MudCardContent>
+    </MudCard>
+
+    <MudCard Class="my-1">
+        <MudCardContent Style="padding-top:0; padding-bottom:0;">
+            <div class="row align-items-center">
+                <div class="col-3">
+                    <h1 class="text-center">@CurrentEnglish.Item1</h1>
+                </div>
+                <div class="col-6">
+                    <MudTextField @bind-Value="EnteredEnglish" Label="Enter Kana" Variant="Variant.Outlined" />
+                </div>
+                <div class="col-3">
+                    <MudButton OnClick="CheckEnglishGuess" Color="Color.Primary">Enter</MudButton>
+                </div>
+            </div>
+        </MudCardContent>
+    </MudCard>
+}

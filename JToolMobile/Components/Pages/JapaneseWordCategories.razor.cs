@@ -1,5 +1,3 @@
-using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
 using JToolMobile.Models;
 using System.Text;
 
@@ -17,7 +15,7 @@ namespace JToolMobile.Components.Pages
         private List<CategoryModel> SelectedCategories = new List<CategoryModel>();
 
         private bool DeleteDisabled = true;
-        private bool Expanded = true;
+        private bool Expanded = false;
 
         protected override async Task OnInitializedAsync()
         {
@@ -88,7 +86,8 @@ namespace JToolMobile.Components.Pages
         {
             if (SelectedCategories.Count == 0)
             {
-                await Toast.Make("Please select a Category to remove", ToastDuration.Short).Show();
+                Snackbar.Add("Please select a Category to remove", MudBlazor.Severity.Warning);
+
                 return;
             }
 
@@ -103,7 +102,7 @@ namespace JToolMobile.Components.Pages
             }
             else
             {
-                await Toast.Make("One or more selected Categories has words assigned to it", ToastDuration.Short).Show();
+                Snackbar.Add("One or more selected Categories has words assigned to it", MudBlazor.Severity.Warning);
             }
         }
 
@@ -124,10 +123,10 @@ namespace JToolMobile.Components.Pages
         {
             if (!Expanded)
             {
-                return "calc(100vh - 160px)";
+                return "calc(100vh - 170px)";
             }
 
-            return "calc(100vh - 210px)";
+            return "calc(100vh - 220px)";
         }
     }
 }

@@ -1,5 +1,3 @@
-using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
 using JToolMobile.Models;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -143,19 +141,19 @@ namespace JToolMobile.Components.Pages
             }
         }
 
-        private async Task EnglishKeyPress(KeyboardEventArgs e)
+        private void EnglishKeyPress(KeyboardEventArgs e)
         {
             if (e.Key == "Enter")
             {
-                await SubmitEnglishWord();
+                SubmitEnglishWord();
             }
         }
 
-        private async Task SubmitEnglishWord()
+        private void SubmitEnglishWord()
         {
             if (EnglishWord.ToLower().Trim() == RandomEnglishWord.RomanjiWord.ToLower().Trim() || EnglishWord.ToLower().Trim() == RandomEnglishWord.JapaneseWord.ToLower().Trim()) //Entered correct translation
             {
-                await Toast.Make("Correct.", ToastDuration.Short).Show();
+                Snackbar.Add("Correct.", MudBlazor.Severity.Success);
 
                 GetRandomEnglishWord();
 
@@ -163,23 +161,23 @@ namespace JToolMobile.Components.Pages
             }
             else //wrong answer
             {
-                await Toast.Make("Wrong answer. Please try again.", ToastDuration.Short).Show();
+                Snackbar.Add("Wrong answer. Please try again.", MudBlazor.Severity.Error);
             }
         }
 
-        private async Task RomanjiKeyPress(KeyboardEventArgs e)
+        private void RomanjiKeyPress(KeyboardEventArgs e)
         {
             if (e.Key == "Enter")
             {
-                await SubmitRomanjiWord();
+                SubmitRomanjiWord();
             }
         }
 
-        private async Task SubmitRomanjiWord()
+        private void SubmitRomanjiWord()
         {
             if (RomanjiWord.ToLower().Trim() == RandomRomanjiWord.EnglishWord.ToLower().Trim()) //Entered correct translation
             {
-                await Toast.Make("Correct.", ToastDuration.Short).Show();
+                Snackbar.Add("Correct.", MudBlazor.Severity.Success);
 
                 GetRandomRomanjiWord();
 
@@ -187,23 +185,23 @@ namespace JToolMobile.Components.Pages
             }
             else //wrong answer
             {
-                await Toast.Make("Wrong answer. Please try again.", ToastDuration.Short).Show();
+                Snackbar.Add("Wrong answer. Please try again.", MudBlazor.Severity.Error);
             }
         }
 
-        private async Task JapaneseKeyPress(KeyboardEventArgs e)
+        private void JapaneseKeyPress(KeyboardEventArgs e)
         {
             if (e.Key == "Enter")
             {
-                await SubmitJapaneseWord();
+                SubmitJapaneseWord();
             }
         }
 
-        private async Task SubmitJapaneseWord()
+        private void SubmitJapaneseWord()
         {
             if (JapaneseWord.ToLower().Trim() == RandomJapaneseWord.EnglishWord.ToLower().Trim()) //Entered correct translation
             {
-                await Toast.Make("Correct.", ToastDuration.Short).Show();
+                Snackbar.Add("Correct.", MudBlazor.Severity.Success);
 
                 GetRandomJapaneseWord();
 
@@ -211,7 +209,7 @@ namespace JToolMobile.Components.Pages
             }
             else //wrong answer
             {
-                await Toast.Make("Wrong answer. Please try again.", ToastDuration.Short).Show();
+                Snackbar.Add("Wrong answer. Please try again.", MudBlazor.Severity.Error);
             }
         }
 
